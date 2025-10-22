@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Controllers;
 
 use App\Models\ProductModel;
@@ -16,15 +17,15 @@ class Sewa extends BaseController
         $this->productModel = new ProductModel();
         $this->transactionModel = new TransactionModel();
         $this->transactionDetailModel = new TransactionDetailModel();
-
-        // Check if user is logged in
-        if (!session()->get('isLoggedIn')) {
-            return redirect()->to('/auth/login')->with('error', 'Silakan login terlebih dahulu untuk melakukan penyewaan');
-        }
     }
 
     public function index($product_id)
     {
+        // Cek login - HARUS customer
+        if (!$this->isCustomerLoggedIn()) {
+            return $this->redirectToLogin();
+        }
+
         $product = $this->productModel->getProductById($product_id);
 
         if (!$product) {
@@ -45,6 +46,11 @@ class Sewa extends BaseController
 
     public function process()
     {
+        // Cek login - HARUS customer
+        if (!$this->isCustomerLoggedIn()) {
+            return $this->redirectToLogin();
+        }
+
         if (!$this->request->is('post')) {
             return redirect()->back();
         }
@@ -102,7 +108,8 @@ class Sewa extends BaseController
                 'tanggal_sewa' => $post['tanggal_sewa'],
                 'tanggal_kembali' => $post['tanggal_kembali'],
                 'lama_sewa' => $lama_sewa,
-                'catatan' => $post['catatan'] ?? ''
+                'catatan' => $post['catatan'] ?? '',
+                'status' => 'pending'
             ];
 
             // Create transaction
@@ -143,6 +150,11 @@ class Sewa extends BaseController
 
     public function konfirmasi($transaction_id)
     {
+        // Cek login - HARUS customer
+        if (!$this->isCustomerLoggedIn()) {
+            return $this->redirectToLogin();
+        }
+
         $transaction = $this->transactionModel->getTransactionWithDetails($transaction_id);
 
         if (!$transaction || $transaction['user_id'] != session()->get('id')) {
@@ -159,6 +171,11 @@ class Sewa extends BaseController
 
     public function riwayat()
     {
+        // Cek login - HARUS customer
+        if (!$this->isCustomerLoggedIn()) {
+            return $this->redirectToLogin();
+        }
+
         $transactions = $this->transactionModel->getTransactionsByUser(session()->get('id'));
 
         $data = [
@@ -167,5 +184,68 @@ class Sewa extends BaseController
         ];
 
         return view('sewa/riwayat', $data);
+    }
+
+    /**
+     * Check if customer is logged in
+     */
+    private function isCustomerLoggedIn()
+    {
+        return session()->get('isLoggedIn') && session()->get('role') == 'customer';
+    }
+
+    /**
+     * Redirect to login page with appropriate message
+     */
+    private function redirectToLogin()
+    {
+        return redirect()->to('/auth/login')
+            ->with('error', 'Silakan login sebagai customer terlebih dahulu untuk melakukan penyewaan')
+            ->with('redirect', current_url());
+    }
+
+    /**
+     * Batalkan transaksi
+     */
+    public function batalkan($transaction_id)
+    {
+        // Cek login - HARUS customer
+        if (!$this->isCustomerLoggedIn()) {
+            return $this->redirectToLogin();
+        }
+
+        $transaction = $this->transactionModel->find($transaction_id);
+
+        // Validasi ownership
+        if (!$transaction || $transaction['user_id'] != session()->get('id')) {
+            return redirect()->back()->with('error', 'Transaksi tidak ditemukan');
+        }
+
+        // Hanya bisa dibatalkan jika status masih pending
+        if ($transaction['status'] != 'pending') {
+            return redirect()->back()->with('error', 'Transaksi tidak dapat dibatalkan');
+        }
+
+        $db = \Config\Database::connect();
+        $db->transStart();
+
+        try {
+            // Kembalikan stok
+            $details = $this->transactionDetailModel->where('transaksi_id', $transaction_id)->findAll();
+            foreach ($details as $detail) {
+                $this->productModel->increaseStock($detail['produk_id'], $detail['jumlah']);
+            }
+
+            // Update status transaksi
+            $this->transactionModel->update($transaction_id, ['status' => 'cancelled']);
+
+            $db->transComplete();
+
+            return redirect()->to('/sewa/riwayat')->with('success', 'Transaksi berhasil dibatalkan');
+
+        } catch (\Exception $e) {
+            $db->transRollback();
+            return redirect()->back()->with('error', 'Gagal membatalkan transaksi: ' . $e->getMessage());
+        }
     }
 }
