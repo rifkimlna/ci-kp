@@ -60,6 +60,9 @@ $routes->get('/sewa/(:num)', 'Sewa::index/$1');
 $routes->post('/sewa/process', 'Sewa::process');
 $routes->get('/sewa/konfirmasi/(:num)', 'Sewa::konfirmasi/$1');
 
+$routes->get('/produk/(:num)', 'KatalogController::detail/$1');
+
+
 // Riwayat Routes
 $routes->get('/riwayat', 'Riwayat::index');
 $routes->get('/riwayat/detail/(:num)', 'Riwayat::detail/$1');
