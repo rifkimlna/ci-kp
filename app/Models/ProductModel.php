@@ -7,8 +7,31 @@ class ProductModel extends Model
 {
     protected $table = 'produk';
     protected $primaryKey = 'id';
-    protected $allowedFields = ['kategori_id', 'nama_produk', 'deskripsi', 'spesifikasi', 'harga_per_hari', 'stok', 'gambar', 'status'];
+    protected $allowedFields = ['kategori_id', 'nama_produk', 'deskripsi', 'spesifikasi', 'harga_per_hari', 'stok', 'gambar', 'status','created_at', 'updated_at'];
     protected $useTimestamps = true;
+     protected $createdField = 'created_at';
+    protected $updatedField = 'updated_at';
+
+
+     public function getProdukWithKategori()
+    {
+        return $this->select('produk.*, kategori.nama_kategori')
+                    ->join('kategori', 'kategori.id = produk.id_kategori')
+                    ->orderBy('produk.created_at', 'DESC')
+                    ->findAll();
+    }
+
+    public function getLowStockProducts($threshold = 5)
+    {
+        return $this->where('stok <=', $threshold)
+                    ->where('status', 'active')
+                    ->findAll();
+    }
+
+    public function getActiveProducts()
+    {
+        return $this->where('status', 'active')->findAll();
+    }
 
     public function getFeaturedProducts($limit = 6)
     {

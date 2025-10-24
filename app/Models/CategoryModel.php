@@ -23,4 +23,6 @@ class CategoryModel extends Model
             ->orderBy('kategori_produk.nama_kategori', 'ASC')
             ->findAll();
     }
+
+   
 }
