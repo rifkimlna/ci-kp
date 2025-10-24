@@ -220,7 +220,7 @@
     </div>
 </section>
 
-<!-- Testimonials Section -->
+<!-- Testimonials Section
 <section id="testimoni" class="py-16">
     <h2 class="text-text-primary text-3xl font-bold leading-tight tracking-tight px-4 pb-8 text-center">Kata <span class="text-primary">Klien Kami</span></h2>
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 p-4">
@@ -267,7 +267,7 @@
             <p class="text-text-secondary italic">"Sudah beberapa kali sewa lighting equipment di sini. Kualitas terjamin dan harga kompetitif. Bakal repeat order terus!"</p>
         </div>
     </div>
-</section>
+</section> -->
 
 <!-- How It Works Section -->
 <section id="cara-sewa" class="py-16">
