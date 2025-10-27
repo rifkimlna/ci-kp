@@ -157,6 +157,7 @@
                         <div class="flex-1">
                             <input type="file" 
                                    name="gambar" 
+                                   accept="image/*"
                                    class="w-full bg-background-dark border border-text-secondary/30 rounded-lg px-4 py-3 text-text-primary focus:outline-none focus:ring-2 focus:ring-primary file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-primary file:text-background-dark hover:file:bg-accent">
                             <p class="text-text-secondary text-sm mt-2">Unggah gambar baru untuk mengganti gambar saat ini</p>
                         </div>
