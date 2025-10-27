@@ -8,6 +8,7 @@ use CodeIgniter\Router\RouteCollection;
  */
 $routes->get('/', 'Home::index');
 $routes->get('/katalog', 'Home::katalog');
+$routes->get('/porto', 'Porto::index');
 $routes->get('/produk/(:num)', 'Home::detailProduk/$1');
 
 // Sewa Routes

@@ -115,6 +115,11 @@
     <span class="truncate">Jelajahi Koleksi &rarr;</span>
 </a>
 
+<a href="<?= base_url('/porto') ?>" class="inline-flex items-center justify-center rounded-lg h-12 px-8 bg-card-dark border border-primary text-primary hover:bg-primary/20 font-bold transition-colors">
+    Lihat Hasil Produk
+</a>
+
+
 <!-- Trust Badges -->
 <div class="mt-8 flex justify-center items-center space-x-6">
     <p class="text-sm font-semibold text-text-primary border-r pr-6 border-text-secondary">⭐️ Rating 4.9/5.0</p>
