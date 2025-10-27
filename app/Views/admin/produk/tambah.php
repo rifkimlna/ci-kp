@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8"/>
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-    <title>Kelola Produk - PRORENTAL</title>
+    <title>Tambah Produk - PRORENTAL</title>
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
@@ -81,64 +81,97 @@
 <main class="flex-1 px-4 py-8">
     <div class="flex flex-wrap justify-between items-center gap-4 mb-8">
         <h1 class="text-text-primary text-4xl font-black leading-tight tracking-[-0.033em]">
-            Kelola <span class="text-primary">Produk</span>
+            Tambah <span class="text-primary">Produk</span>
         </h1>
     </div>
 
-    <?php if (session()->getFlashdata('success')): ?>
-        <div class="bg-green-500/20 border border-green-500 text-green-400 px-4 py-3 rounded-lg mb-6">
-            <?= session()->getFlashdata('success') ?>
-        </div>
-    <?php endif; ?>
+    <div class="bg-card-dark rounded-xl p-6 max-w-4xl">
+        <form action="/admin/produk/simpan" method="post" enctype="multipart/form-data">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Nama Produk -->
+                <div class="md:col-span-2">
+                    <label class="block text-text-primary font-medium mb-2">Nama Produk</label>
+                    <input type="text" 
+                           name="nama_produk" 
+                           class="w-full bg-background-dark border border-text-secondary/30 rounded-lg px-4 py-3 text-text-primary focus:outline-none focus:ring-2 focus:ring-primary placeholder:text-text-secondary"
+                           placeholder="Masukkan nama produk"
+                           required>
+                </div>
 
-    <a href="/admin/produk/tambah" class="flex items-center justify-center rounded-lg h-12 px-6 bg-primary text-background-dark text-base font-bold hover:bg-accent transition-colors mb-6 w-fit">
-        <span class="material-symbols-outlined mr-2">add</span>
-        Tambah Produk
-    </a>
+                <!-- Harga per Hari -->
+                <div>
+                    <label class="block text-text-primary font-medium mb-2">Harga per Hari</label>
+                    <input type="number" 
+                           name="harga_per_hari" 
+                           class="w-full bg-background-dark border border-text-secondary/30 rounded-lg px-4 py-3 text-text-primary focus:outline-none focus:ring-2 focus:ring-primary placeholder:text-text-secondary"
+                           placeholder="Masukkan harga sewa per hari"
+                           required>
+                </div>
 
-    <div class="bg-card-dark rounded-xl overflow-hidden">
-        <table class="w-full">
-            <thead class="bg-background-dark">
-                <tr>
-                    <th class="px-6 py-4 text-left text-text-primary font-bold">No</th>
-                    <th class="px-6 py-4 text-left text-text-primary font-bold">Nama Produk</th>
-                    <th class="px-6 py-4 text-left text-text-primary font-bold">Harga / Hari</th>
-                    <th class="px-6 py-4 text-left text-text-primary font-bold">Stok</th>
-                    <th class="px-6 py-4 text-left text-text-primary font-bold">Status</th>
-                    <th class="px-6 py-4 text-left text-text-primary font-bold">Gambar</th>
-                    <th class="px-6 py-4 text-left text-text-primary font-bold">Aksi</th>
-                </tr>
-            </thead>
-            <tbody class="divide-y divide-text-secondary/20">
-                <?php $no=1; foreach($produk as $p): ?>
-                    <tr class="hover:bg-background-dark/50 transition-colors">
-                        <td class="px-6 py-4 text-text-primary"><?= $no++ ?></td>
-                        <td class="px-6 py-4 text-text-primary"><?= esc($p['nama_produk']) ?></td>
-                        <td class="px-6 py-4 text-primary font-semibold">Rp<?= number_format($p['harga_per_hari'],0,',','.') ?></td>
-                        <td class="px-6 py-4 text-text-primary"><?= esc($p['stok']) ?></td>
-                        <td class="px-6 py-4">
-                            <span class="px-3 py-1 rounded-full text-xs font-medium <?= $p['status'] == 'Tersedia' ? 'bg-green-500/20 text-green-400' : 'bg-red-500/20 text-red-400' ?>">
-                                <?= esc($p['status']) ?>
-                            </span>
-                        </td>
-                        <td class="px-6 py-4">
-                            <img src="/uploads/produk/<?= $p['gambar'] ?>" width="70" height="70" class="rounded-lg object-cover border border-text-secondary/30">
-                        </td>
-                        <td class="px-6 py-4">
-                            <div class="flex gap-2">
-                                <a href="/admin/produk/edit/<?= $p['id'] ?>" class="flex items-center justify-center rounded-lg h-9 px-4 bg-yellow-500/20 text-yellow-400 text-sm font-bold hover:bg-yellow-500/30 transition-colors">
-                                    Edit
-                                </a>
-                                <a href="/admin/produk/hapus/<?= $p['id'] ?>" class="flex items-center justify-center rounded-lg h-9 px-4 bg-red-500/20 text-red-400 text-sm font-bold hover:bg-red-500/30 transition-colors"
-                                   onclick="return confirm('Yakin hapus produk ini?')">
-                                    Hapus
-                                </a>
-                            </div>
-                        </td>
-                    </tr>
-                <?php endforeach; ?>
-            </tbody>
-        </table>
+                <!-- Stok -->
+                <div>
+                    <label class="block text-text-primary font-medium mb-2">Stok</label>
+                    <input type="number" 
+                           name="stok" 
+                           class="w-full bg-background-dark border border-text-secondary/30 rounded-lg px-4 py-3 text-text-primary focus:outline-none focus:ring-2 focus:ring-primary placeholder:text-text-secondary"
+                           placeholder="Masukkan jumlah stok"
+                           required>
+                </div>
+
+                <!-- Status -->
+                <div>
+                    <label class="block text-text-primary font-medium mb-2">Status</label>
+                    <select name="status" 
+                            class="w-full bg-background-dark border border-text-secondary/30 rounded-lg px-4 py-3 text-text-primary focus:outline-none focus:ring-2 focus:ring-primary">
+                        <option value="active">Aktif</option>
+                        <option value="unactive">Tidak Aktif</option>
+                    </select>
+                </div>
+
+                <!-- Deskripsi -->
+                <div class="md:col-span-2">
+                    <label class="block text-text-primary font-medium mb-2">Deskripsi</label>
+                    <textarea name="deskripsi" 
+                              rows="3"
+                              class="w-full bg-background-dark border border-text-secondary/30 rounded-lg px-4 py-3 text-text-primary focus:outline-none focus:ring-2 focus:ring-primary placeholder:text-text-secondary"
+                              placeholder="Masukkan deskripsi produk"></textarea>
+                </div>
+
+                <!-- Spesifikasi -->
+                <div class="md:col-span-2">
+                    <label class="block text-text-primary font-medium mb-2">Spesifikasi</label>
+                    <textarea name="spesifikasi" 
+                              rows="3"
+                              class="w-full bg-background-dark border border-text-secondary/30 rounded-lg px-4 py-3 text-text-primary focus:outline-none focus:ring-2 focus:ring-primary placeholder:text-text-secondary"
+                              placeholder="Masukkan spesifikasi teknis produk"></textarea>
+                </div>
+
+                <!-- Gambar Produk -->
+                <div class="md:col-span-2">
+                    <label class="block text-text-primary font-medium mb-2">Gambar Produk</label>
+                    <input type="file" 
+                           name="gambar" 
+                           accept="image/*"
+                           class="w-full bg-background-dark border border-text-secondary/30 rounded-lg px-4 py-3 text-text-primary focus:outline-none focus:ring-2 focus:ring-primary file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-primary file:text-background-dark hover:file:bg-accent"
+                           required>
+                    <p class="text-text-secondary text-sm mt-2">Unggah gambar produk (format: JPG, PNG, JPEG)</p>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="flex gap-4 mt-8 pt-6 border-t border-text-secondary/20">
+                <button type="submit" 
+                        class="flex items-center justify-center rounded-lg h-12 px-8 bg-primary text-background-dark text-base font-bold hover:bg-accent transition-colors">
+                    <span class="material-symbols-outlined mr-2">save</span>
+                    Simpan Produk
+                </button>
+                <a href="/admin/produk" 
+                   class="flex items-center justify-center rounded-lg h-12 px-8 bg-card-dark text-text-primary border border-text-secondary/30 text-base font-bold hover:bg-text-secondary/20 transition-colors">
+                    <span class="material-symbols-outlined mr-2">arrow_back</span>
+                    Kembali
+                </a>
+            </div>
+        </form>
     </div>
 </main>
 

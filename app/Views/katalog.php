@@ -218,10 +218,10 @@
                 <?php if (!empty($products)): ?>
                     <?php foreach ($products as $product): ?>
                         <div class="flex flex-col bg-card-dark rounded-xl overflow-hidden group hover:shadow-2xl hover:shadow-primary/20 hover:-translate-y-1 transition-all duration-300">
-                            <img src="<?= base_url('uploads/products/' . esc($product['gambar'])) ?>" 
+                            <img src="<?= base_url('uploads/produk/' . esc($product['gambar'])) ?>" 
                                  alt="<?= esc($product['nama_produk']) ?>" 
-                                 class="w-full aspect-video object-cover"
-                                 onerror="this.src='https://placehold.co/600x400/1D2A43/00BFFF?text=<?= urlencode($product['nama_produk']) ?>'"/>
+                                class="w-full aspect-video object-cover"
+                                onerror="this.src='https://placehold.co/600x400/1D2A43/00BFFF?text=<?= urlencode($product['nama_produk']) ?>'"/>
                             
                             <div class="p-4 flex flex-col flex-grow">
                                 <h4 class="text-text-primary text-lg font-bold leading-normal"><?= esc($product['nama_produk']) ?></h4>

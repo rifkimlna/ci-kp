@@ -40,7 +40,6 @@ $routes->get('/admin/dashboard', 'Admin\Dashboard::index');
 
 
 // Produk Routes (placeholder)
-$routes->get('/admin/produk', 'Admin\Dashboard::index');
 $routes->get('/admin/users', 'Admin\Dashboard::index');
 
 
@@ -59,5 +58,23 @@ $routes->group('admin', ['filter' => 'auth'], function($routes) {
     $routes->post('transaksi/update-status/(:num)', 'Admin\Transaksi::updateStatus/$1');
     $routes->post('transaksi/batalkan/(:num)', 'Admin\Transaksi::batalkan/$1');
 });
+
+
+
+
+
+
+
+
+$routes->group('admin', ['namespace' => 'App\Controllers\Admin'], function($routes){
+    $routes->get('produk', 'ProdukController::index');
+    $routes->get('produk/tambah', 'ProdukController::tambah');
+    $routes->post('produk/simpan', 'ProdukController::simpan');
+    $routes->get('produk/edit/(:num)', 'ProdukController::edit/$1');
+    $routes->post('produk/update/(:num)', 'ProdukController::update/$1');
+    $routes->get('produk/hapus/(:num)', 'ProdukController::hapus/$1');
+});
+
+
 
 

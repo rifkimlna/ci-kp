@@ -7,10 +7,12 @@ class ProductModel extends Model
 {
     protected $table = 'produk';
     protected $primaryKey = 'id';
-    protected $allowedFields = ['kategori_id', 'nama_produk', 'deskripsi', 'spesifikasi', 'harga_per_hari', 'stok', 'gambar', 'status','created_at', 'updated_at'];
+    protected $allowedFields = ['kategori_id', 'nama_produk', 'deskripsi', 'spesifikasi', 'harga_per_hari', 'stok', 'status' ,'gambar','created_at', 'updated_at'];
     protected $useTimestamps = true;
      protected $createdField = 'created_at';
     protected $updatedField = 'updated_at';
+
+    
 
 
      public function getProdukWithKategori()
@@ -21,12 +23,15 @@ class ProductModel extends Model
                     ->findAll();
     }
 
-    public function getLowStockProducts($threshold = 5)
+      public function getLowStockProducts($threshold = 5)
     {
         return $this->where('stok <=', $threshold)
                     ->where('status', 'active')
                     ->findAll();
     }
+
+
+
 
     public function getActiveProducts()
     {
